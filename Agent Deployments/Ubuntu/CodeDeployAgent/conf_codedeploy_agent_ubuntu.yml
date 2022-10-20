@@ -1,0 +1,28 @@
+---
+# Author: Rahul Yadav
+- name: Configures & Install CodeDeploy Agent on Ubuntu LTS v18.04, v20.04
+  hosts: ubuntu_v20.04
+  become: true
+
+  tasks:
+  - name: Updating Apt
+    apt:
+      update_cache: yes
+
+  - name: Installing Dependencies
+    command: sudo apt install {{ item }}
+    with_items:
+      - ruby-full -y
+      - wget -y
+  
+  - name: Fetch CodeDeploy Agent 
+    command: sudo wget https://aws-codedeploy-ap-south-1.s3.ap-south-1.amazonaws.com/latest/install
+
+  - name: Making it installable
+    command: sudo chmod +x ./install
+
+  - name: Installing CodeDeploy Agent
+    command: sudo ./install auto
+
+  - name: Checking Status of the Agent
+    command: sudo service codedeploy-agent status
