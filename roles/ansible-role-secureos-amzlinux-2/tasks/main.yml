@@ -1,0 +1,4 @@
+---
+# tasks file for ansible-role-secureos-amzlinux-2
+
+- import_tasks: do_patch_prechecks.yml 

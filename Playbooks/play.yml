@@ -1,0 +1,14 @@
+---
+
+- name: Manage roles at oneguest
+  hosts: 
+    dev-01
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: ansible-role-service-docker-amzlinux2
+      vars:
+        DOCKER_COMPOSE_VERSION: "v2.2.2"
+
+

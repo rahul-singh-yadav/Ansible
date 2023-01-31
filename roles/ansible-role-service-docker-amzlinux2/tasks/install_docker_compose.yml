@@ -1,0 +1,18 @@
+---
+
+    - name: Get Os Name
+      command: uname -s
+      register: os_version
+
+    - name: Get OS Arch
+      command: uname -m
+      register: os_arch
+
+    - name: Installing Docker Compose
+      # Module Doc: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html#ansible-collections-ansible-builtin-get-url-module
+      # Compose Version: https://github.com/docker/compose/releases
+      ansible.builtin.get_url:
+        url: https://github.com/docker/compose/releases/download/{{ DOCKER_COMPOSE_VERSION }}/docker-compose-{{ os_version.stdout }}-{{ os_arch.stdout }}
+        dest: /usr/local/bin/docker-compose
+        mode: 'u=rxw,g=x,o=x'
+        owner: ec2-user

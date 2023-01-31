@@ -1,0 +1,38 @@
+---
+
+    - name: Update & Upgrade Yum Packages
+      yum:
+        update_only: yes
+
+    - name: Enabling docker
+      ansible.builtin.command:
+        sudo amazon-linux-extras enable docker
+
+    - name: Clear metadata & Install docker
+      ansible.builtin.command:
+        sudo yum clean metadata
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: latest
+
+    - name: Adding current user to docker group
+      ansible.builtin.user:
+        name: ec2-user
+        groups: 'docker'
+        append: True
+          
+    - name: Wait until docker installs
+      ansible.builtin.wait_for:
+        timeout: 60
+
+    # If fails post this step, --start-task-at="<next step>"
+    - name: Start the docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+
+    - name: Confirm docker installation
+      ansible.builtin.command:
+        sudo service docker status
