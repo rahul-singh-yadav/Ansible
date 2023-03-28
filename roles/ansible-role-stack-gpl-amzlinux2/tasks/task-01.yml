@@ -1,0 +1,35 @@
+---
+# Author: Rahul Yadav
+# About: Configures docker volumes and installs observability exporters, runs them on each node that has to be monitored.
+
+  - name: Project source
+    ansible.builtin.file:
+      path: "/home/ec2-user/gpl-exporters"
+      owner: ec2-user
+      group: ec2-user
+      state: directory
+
+  - name: Verify source
+    ansible.builtin.command: cd gpl-exporters && pwd
+
+  - name: Transfer compose file
+    ansible.builtin.copy:
+      src: "docker-compose.exporters.yml"
+      dest: "/home/ec2-user/gpl-exporters/"
+      owner: ec2-user
+      group: ec2-user 
+
+  - name: Creating volumes
+    community.docker.docker_volume:
+      name: prometheus_data
+
+  - name: Switch To ProjectSrc
+    ansible.builtin.command: cd /home/ec2-user/gpl-exporters/
+
+  - name: Starting the stack
+    ansible.builtin.command: docker-compose -f docker-compose.exporters.yml up -d
+      
+  - name: Verify stack
+    ansible.builtin.command: docker ps
+
+...

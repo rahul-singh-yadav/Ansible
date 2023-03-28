@@ -1,0 +1,6 @@
+---
+# tasks file for ansible-role-stack-gpl-amzlinux2
+# Author: Rahul Yadav
+# Imports sub-tasks
+
+- import_tasks: task-01.yml
