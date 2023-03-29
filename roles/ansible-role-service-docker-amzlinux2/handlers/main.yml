@@ -1,2 +1,6 @@
 ---
 # handlers file for ansible-role-service-docker-amzlinux2
+    - name: Enable docker
+      ansible.builtin.service:
+        name: docker
+        enabled: true
