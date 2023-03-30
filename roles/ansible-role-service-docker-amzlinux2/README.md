@@ -7,6 +7,7 @@ Requirements
 ------------
 
 ansible version: `2.9.23`
+
 docker-ce version: `20.10.17`
 
 Role Variables
