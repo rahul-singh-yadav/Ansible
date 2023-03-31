@@ -55,8 +55,7 @@
 
     - name: Wait until docker service starts
       ansible.builtin.wait_for:
-        timeout: 60
-        port: 2375     
+        timeout: 60  
 
     - name: Confirm docker installation
       debug:
