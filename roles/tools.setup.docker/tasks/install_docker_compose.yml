@@ -14,5 +14,11 @@
       ansible.builtin.get_url:
         url: https://github.com/docker/compose/releases/download/{{ DOCKER_COMPOSE_VERSION }}/docker-compose-{{ os_version.stdout }}-{{ os_arch.stdout }}
         dest: /usr/local/bin/docker-compose
-        mode: 'u=rxw,g=x,o=x'
+        mode: 'u=rxw,g=rx,o=r'
         owner: ec2-user
+      register: download_result
+      until: download_result is succeeded
+      retries: 3
+      delay: 5
+      
+...

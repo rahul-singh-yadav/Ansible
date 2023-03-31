@@ -2,7 +2,7 @@
 # defaults file for ansible-role-service-docker-amzlinux2
 
 vars:
-  DOCKER_COMPOSE_VERSION: "v2.2.2"
+  DOCKER_COMPOSE_VERSION: "v2.10.10"
   DOCKER_PACKAGES:
     - apt-transport-https
     - ca-certificates
