@@ -1,0 +1,57 @@
+---
+# Installs docker on ubuntu 20.4
+
+    - name: Updates & Upgrade Apt
+      command: sudo apt update -y
+
+    - name: Installs prerequisite docker packages
+      # Module Doc: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#ansible-collections-ansible-builtin-apt-module
+      apt:
+        name: "{{ DOCKER_PACKAGES }}"
+        state: present
+        force_apt_get: yes
+
+
+    - name: Use Apt to Add Docker GPG Keys
+      # Module Doc: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_key_module.html#ansible-collections-ansible-builtin-apt-key-module
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Saving OS Version to variable
+      command: lsb_release -cs
+      register: Ubuntu_Version_Name
+
+    - name: Add the docker repository to Apt
+      # Module Doc: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module.html#ansible-collections-ansible-builtin-apt-repository-module
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ Ubuntu_Version_Name.stdout }} stable
+        state: present
+    
+    - name: Ensure we install from official docker repo
+      # Updates Apt Repo
+      command: apt-cache policy docker-ce
+
+    - name: Install Docker Engine
+      command : sudo apt install docker-ce -y
+
+    - name: Confirm Docker Installation
+      command: systemctl status docker
+
+    - name: Adding current user to docker group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: 'docker'
+        append: True
+
+    - name: Installing Tools for container monitoring
+      command: sudo apt install ctop -v {{ CTOP_VERSION }}
+
+    - name: Installing Docker Compose
+      # Module Doc: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html#ansible-collections-ansible-builtin-get-url-module
+      # Compose Version: https://github.com/docker/compose/releases
+      ansible.builtin.get_url:
+        url: https://github.com/docker/compose/releases/download/2.0/docker-compose-$(uname -s)-$(uname -m)
+        dest: /usr/local/bin/docker-compose
+        mode: '0600'
+        owner: ubuntu

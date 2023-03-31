@@ -1,5 +1,0 @@
----
-# Uninstalls docker from the current system.
-
-    - name: Uninstall docker
-      

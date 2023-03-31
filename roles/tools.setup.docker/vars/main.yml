@@ -5,3 +5,10 @@
 # If user doesn't provide any variable
 
 DOCKER_COMPOSE_VERSION: "v2.2.2"
+DOCKER_PACKAGES:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - lsb-release
+  - software-properties-common

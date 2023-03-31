@@ -1,7 +1,0 @@
----
-# vars file for ansible-role-service-docker-amzlinux2
-
-# Default compose version
-# If user doesn't provide any variable
-
-DOCKER_COMPOSE_VERSION: "v2.2.2"
