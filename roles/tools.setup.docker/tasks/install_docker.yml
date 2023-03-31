@@ -39,8 +39,10 @@
         src: ./templates/conf_storage_driver.json.j2
         dest: /etc/docker/daemon.json
       register: template_output
+
+    - name: print the template output
       debug:
-        var: {{ template_output }}
+        var: "{{ template_output }}"
 
     # If fails post this step, notify the designated handler.
     - name: Start the docker service
