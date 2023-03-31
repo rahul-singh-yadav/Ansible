@@ -18,26 +18,15 @@ You can set the following variables to `vars/main` or `defaults/main.yml`, an ex
 
 This role doesn't make use of other roles. Thus there's not variables set under `hostvars` or `group vars` for now.
 
-Dependencies
-------------
+Future Improvements
+-------------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role needs your active support, however future versions of this role will have the following:
 
-How to use this role
-----------------
+- Ability to detect OS version using `ansible_facts` and run different playbooks accordingly.
+- More handlers incoming.
+- Better package management.
+- Part of being a collection for devops roles. 
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+That's all folks!
