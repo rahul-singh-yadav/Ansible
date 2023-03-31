@@ -9,6 +9,11 @@
       ansible.builtin.command:  rpm -q docker-ce
       ignore_errors: true
       register: docker_installed
+      failed_when: docker_installed.rc == 1
+
+    - name: Print output
+      debug:
+        var: docker_installed
 
     # Enable docker repo, post that notify handler to clean metadata.
     - name: Enabling docker
@@ -25,6 +30,7 @@
     - name: Check ec2-user already in docker group
       ansible.builtin.command: id -ng ec2-user | grep -q docker
       register: ec2_user_in_docker_group
+      failed_when: ec2_user_in_docker_group.rc == 1
       ignore_errors: true
 
     - name: Adding ec2-user to docker group
