@@ -1,0 +1,63 @@
+---
+
+    - name: Update & Upgrade Yum Packages
+      ansible.builtin.yum:
+        update_cache: true
+        security: yes
+
+    - name: Check previous docker installation
+      ansible.builtin.command:  rpm -q docker-ce
+      ignore_errors: true
+      register: docker_installed
+
+    # Enable docker repo, post that notify handler to clean metadata.
+    - name: Enabling docker
+      ansible.builtin.command:  amazon-linux-extras enable docker
+      when: docker_installed.rc != 0
+      notify: clean metadata
+
+    - name: Install Docker
+      ansible.builtin.yum:
+        name: docker
+        state: latest
+
+    # Check if ec2-user is already there in docker group.
+    - name: Check ec2-user already in docker group
+      ansible.builtin.command: id -ng ec2-user | grep -q docker
+      register: ec2_user_in_docker_group
+      ignore_errors: true
+
+    - name: Adding ec2-user to docker group
+      ansible.builtin.user:
+        name: ec2-user
+        groups: 'docker'
+        append: true
+      when: ec2_user_in_docker_group.rc != 0
+
+    - name: Configure docker daemon
+      ansible.builtin.template:
+        src: ./templates/conf_storage_driver.json.j2
+        dest: /etc/docker/daemon.json
+      register: template_output
+      debug:
+        var: {{ template_output }}
+
+    # If fails post this step, notify the designated handler.
+    - name: Start the docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+      register: output
+      notify: restart docker
+
+    - name: Wait until docker service starts
+      ansible.builtin.wait_for:
+        timeout: 60
+        port: 2375     
+
+    - name: Confirm docker installation
+      debug:
+        var: output
+
+...

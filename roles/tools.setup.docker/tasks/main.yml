@@ -1,0 +1,8 @@
+---
+# Author: Rahul Yadav
+# Imports sub-tasks
+
+- import_tasks: install_docker.yml 
+- import_tasks: install_docker_compose.yml
+# - import_tasks: uninstall_docker.yml
+# - import_tasks: uninstall_docker_compose.yml

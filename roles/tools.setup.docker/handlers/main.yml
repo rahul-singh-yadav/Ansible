@@ -1,0 +1,13 @@
+---
+# handlers file for tools.setup.docker
+# Add the handlers, and use notify: in main.yml to call these handlers if any exception is raised.
+
+  - name: restart docker
+    ansible.builtin.service:
+      name: docker-ce
+      state: restarted
+
+  - name: clean metadata
+    ansible.builtin.command: yum clean metadata
+
+...
